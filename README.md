@@ -12,7 +12,20 @@ Unfortunately, <a href="http://www.omnigroup.com/products/omnifocus/">OmniFocus 
 
 RemnindersImport solves this problem by adding behavior to my Mac that strongly emulates the behavior built in to OmniFocus for iOS. When launched, the tool will scan for non-location-based reminders, add them to OmniFocus (with start and due dates in-tact!), and then remove them from Apple's reminders list.
 
-Usage
+Build It
+========
+
+The tool should build easily using modern Xcode tools. Assuming you have the command-line xcodebuild in your path:
+
+<pre>
+git clone git@github.com:danielpunkass/RemindersImport.git
+cd RemindersImport
+xcodebuild
+</pre>
+
+The built tool is now in ./build/Release/RemindersImport
+
+Use It
 =====
 
 <strong>Warning:</strong> RemindersImport is designed to scan your Mac OS X Reminders <em>and remove them</em> from the default location in your Reminders list so that they may be added instead to OmniFocus. You should understand very well that this is what you want to do before building and running the tool.
@@ -20,13 +33,13 @@ Usage
 Let's say you have 5 Reminders that you added via Siri on your phone. In the background, thanks to Apple's aggressive syncing, these have been migrated over to your Mac and are now visible in Reminders.app. To migrate these from Reminders to OmniFocus, just run the tool once:
 
 <pre>
-% ./RemindersImport
+./RemindersImport
 </pre>
 
 If you've opted to use a different reminders list for OmniFocus, you can specify the name on the command line to import from that list instead:
 
 <pre>
-% ./RemindersImport "Junk to Do"
+./RemindersImport "Junk to Do"
 </pre>
 
 Automatic Execution
