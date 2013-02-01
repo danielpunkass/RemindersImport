@@ -101,8 +101,8 @@ end tell";
 
 NSString* dateArgumentStringForDateString(NSString* theDateString)
 {
-	// The date arguments should be either "date: \"<dateString>\"" or else "missing value" if nil
-	NSString* dateArgument = ([theDateString length] > 0) ? [NSString stringWithFormat:@"date: \"%@\"", theDateString] : @"missing value";
+	// The date arguments should be either "date \"<dateString>\"" or else "missing value" if nil
+	NSString* dateArgument = ([theDateString length] > 0) ? [NSString stringWithFormat:@"date \"%@\"", theDateString] : @"missing value";
 	return dateArgument;
 }
 
