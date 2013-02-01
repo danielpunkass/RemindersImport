@@ -94,15 +94,25 @@ end if\n\
 \
 tell application \"OmniFocus\"\n\
 	tell default document\n\
-		make new inbox task with properties {name:\"%@\", start date:date \"%@\", due date:date \"%@\"}\n\
+		make new inbox task with properties {name:\"%@\", start date:%@, due date:%@}\n\
 	end tell\n\
 end tell";
+}
+
+NSString* dateArgumentStringForDateString(NSString* theDateString)
+{
+	// The date arguments should be either "date: \"<dateString>\"" or else "missing value" if nil
+	NSString* dateArgument = ([theDateString length] > 0) ? [NSString stringWithFormat:@"date: \"%@\"", theDateString] : @"missing value";
+	return dateArgument;
 }
 
 BOOL makeOmniFocusInboxTaskFromReminderInfo(NSString* newTaskTitle, NSString* startDateString, NSString* dueDateString)
 {
 	BOOL didSucceed = NO;
-	NSString* newTaskAppleScript = [NSString stringWithFormat:omniFocusAddTaskScriptTemplate(), newTaskTitle, startDateString, dueDateString];
+
+	NSString* startDateArgument = dateArgumentStringForDateString(startDateString);
+	NSString* dueDateArgument = dateArgumentStringForDateString(dueDateString);
+	NSString* newTaskAppleScript = [NSString stringWithFormat:omniFocusAddTaskScriptTemplate(), newTaskTitle, startDateArgument, dueDateArgument];
 	NSAppleScript* addTaskScript = [[[NSAppleScript alloc] initWithSource:newTaskAppleScript] autorelease];
 	NSDictionary* anyError = nil;
 	(void) [addTaskScript executeAndReturnError:&anyError];
@@ -137,14 +147,21 @@ NSDateFormatter* gregorianFormatterWithFormat(NSString* formatString)
 
 NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 {
-	// This is in Unicode format as described here: http://userguide.icu-project.org/formatparse/datetime,
-	// and designed to match the example like "Thursday, January 31, 2013 4:32:40 PM". I observed this
-	// format as the default format returned by AppleScript on my US-based English Mac. I can't vouch
-	// for how well this will work in other locales, but let me know if you try it!
-	NSString* dateFormatString = @"EEEE, LLLL d y hh:mm:ss a";
-	NSDate *targetDate = [gregorianCalendar() dateFromComponents:inComponents];
-	NSDateFormatter* dateFormatter = gregorianFormatterWithFormat(dateFormatString);
-	return [dateFormatter stringFromDate:targetDate];
+	NSString* dateString = nil;
+	
+	if (inComponents != nil)
+	{
+		// This is in Unicode format as described here: http://userguide.icu-project.org/formatparse/datetime,
+		// and designed to match the example like "Thursday, January 31, 2013 4:32:40 PM". I observed this
+		// format as the default format returned by AppleScript on my US-based English Mac. I can't vouch
+		// for how well this will work in other locales, but let me know if you try it!
+		NSString* dateFormatString = @"EEEE, LLLL d y hh:mm:ss a";
+		NSDate *targetDate = [gregorianCalendar() dateFromComponents:inComponents];
+		NSDateFormatter* dateFormatter = gregorianFormatterWithFormat(dateFormatString);
+		dateString = [dateFormatter stringFromDate:targetDate];
+	}
+
+	return dateString;
 }
 
 int main(int argc, const char * argv[])
