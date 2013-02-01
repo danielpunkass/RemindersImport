@@ -1,0 +1,240 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		65B462CD16B9FE47006987B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65B462CC16B9FE47006987B3 /* Foundation.framework */; };
+		65B462D016B9FE47006987B3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 65B462CF16B9FE47006987B3 /* main.m */; };
+		65B462DD16B9FF24006987B3 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65B462DC16B9FF24006987B3 /* EventKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		65B462C716B9FE47006987B3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		65B462C916B9FE47006987B3 /* RemindersImport */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RemindersImport; sourceTree = BUILT_PRODUCTS_DIR; };
+		65B462CC16B9FE47006987B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		65B462CF16B9FE47006987B3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		65B462D216B9FE47006987B3 /* RemindersImport-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RemindersImport-Prefix.pch"; sourceTree = "<group>"; };
+		65B462DC16B9FF24006987B3 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		65B462C616B9FE47006987B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65B462CD16B9FE47006987B3 /* Foundation.framework in Frameworks */,
+				65B462DD16B9FF24006987B3 /* EventKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		65B462C016B9FE47006987B3 = {
+			isa = PBXGroup;
+			children = (
+				65B462CE16B9FE47006987B3 /* Source */,
+				65B462CB16B9FE47006987B3 /* Frameworks */,
+				65B462CA16B9FE47006987B3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		65B462CA16B9FE47006987B3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				65B462C916B9FE47006987B3 /* RemindersImport */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65B462CB16B9FE47006987B3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				65B462CC16B9FE47006987B3 /* Foundation.framework */,
+				65B462DC16B9FF24006987B3 /* EventKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		65B462CE16B9FE47006987B3 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				65B462D216B9FE47006987B3 /* RemindersImport-Prefix.pch */,
+				65B462CF16B9FE47006987B3 /* main.m */,
+			);
+			name = Source;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		65B462C816B9FE47006987B3 /* RemindersImport */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 65B462D716B9FE47006987B3 /* Build configuration list for PBXNativeTarget "RemindersImport" */;
+			buildPhases = (
+				65B462C516B9FE47006987B3 /* Sources */,
+				65B462C616B9FE47006987B3 /* Frameworks */,
+				65B462C716B9FE47006987B3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RemindersImport;
+			productName = RemindersImport;
+			productReference = 65B462C916B9FE47006987B3 /* RemindersImport */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		65B462C116B9FE47006987B3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Bitsplitting;
+			};
+			buildConfigurationList = 65B462C416B9FE47006987B3 /* Build configuration list for PBXProject "RemindersImport" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 65B462C016B9FE47006987B3;
+			productRefGroup = 65B462CA16B9FE47006987B3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				65B462C816B9FE47006987B3 /* RemindersImport */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		65B462C516B9FE47006987B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65B462D016B9FE47006987B3 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		65B462D516B9FE47006987B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		65B462D616B9FE47006987B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		65B462D816B9FE47006987B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RemindersImport-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		65B462D916B9FE47006987B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RemindersImport-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		65B462C416B9FE47006987B3 /* Build configuration list for PBXProject "RemindersImport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				65B462D516B9FE47006987B3 /* Debug */,
+				65B462D616B9FE47006987B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		65B462D716B9FE47006987B3 /* Build configuration list for PBXNativeTarget "RemindersImport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				65B462D816B9FE47006987B3 /* Debug */,
+				65B462D916B9FE47006987B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 65B462C116B9FE47006987B3 /* Project object */;
+}

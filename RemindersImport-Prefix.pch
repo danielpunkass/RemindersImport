@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'RemindersImport' target in the 'RemindersImport' project
+//
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+#endif
