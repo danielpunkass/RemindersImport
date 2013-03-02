@@ -46,7 +46,7 @@ NSArray* importableReminderItems(EKEventStore* theEventStore)
 		for (EKReminder* thisReminder in targetReminderItems)
 		{
 			BOOL hasLocationBasedAlarm = NO;
-			
+
 			for (EKAlarm* thisAlarm in [thisReminder alarms])
 			{
 				if ([thisAlarm structuredLocation] != nil)
@@ -110,9 +110,12 @@ BOOL makeOmniFocusInboxTaskFromReminderInfo(NSString* newTaskTitle, NSString* st
 {
 	BOOL didSucceed = NO;
 
+	// Escape any quotes in the task title
+	NSString* escapedTaskTitle = [newTaskTitle stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+
 	NSString* startDateArgument = dateArgumentStringForDateString(startDateString);
 	NSString* dueDateArgument = dateArgumentStringForDateString(dueDateString);
-	NSString* newTaskAppleScript = [NSString stringWithFormat:omniFocusAddTaskScriptTemplate(), newTaskTitle, startDateArgument, dueDateArgument];
+	NSString* newTaskAppleScript = [NSString stringWithFormat:omniFocusAddTaskScriptTemplate(), escapedTaskTitle, startDateArgument, dueDateArgument];
 	NSAppleScript* addTaskScript = [[[NSAppleScript alloc] initWithSource:newTaskAppleScript] autorelease];
 	NSDictionary* anyError = nil;
 	(void) [addTaskScript executeAndReturnError:&anyError];
@@ -148,7 +151,7 @@ NSDateFormatter* gregorianFormatterWithFormat(NSString* formatString)
 NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 {
 	NSString* dateString = nil;
-	
+
 	if (inComponents != nil)
 	{
 		// This is in Unicode format as described here: http://userguide.icu-project.org/formatparse/datetime,
@@ -190,7 +193,7 @@ int main(int argc, const char * argv[])
 		}
 
 		// We queued up any removes by specifying commit:NO, so let's commit now to finish the job
-		NSError* commitError = nil;		
+		NSError* commitError = nil;
 		if ([eventStore commit:&commitError] == NO)
 		{
 			NSLog(@"Failed to commit reminder removes. Error: %@", [commitError localizedDescription]);
