@@ -154,14 +154,14 @@ NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 
 	if (inComponents != nil)
 	{
-		// This is in Unicode format as described here: http://userguide.icu-project.org/formatparse/datetime,
-		// and designed to match the example like "Thursday, January 31, 2013 4:32:40 PM". I observed this
-		// format as the default format returned by AppleScript on my US-based English Mac. I can't vouch
-		// for how well this will work in other locales, but let me know if you try it!
-		NSString* dateFormatString = @"EEEE, LLLL d y hh:mm:ss a";
+		// It seems that apple script uses the localized date format to parse strings to date.
+        // So using a fixed date format won't work for people that have different or custom date format
+        // Here is some more info about this: http://www.jimmcgowan.net/Site/CocoaApplescriptUnicodeDateFormats.html
+        // There for we use localziedStringFromDate in order to produce a string accroding to the system locale.
 		NSDate *targetDate = [gregorianCalendar() dateFromComponents:inComponents];
-		NSDateFormatter* dateFormatter = gregorianFormatterWithFormat(dateFormatString);
-		dateString = [dateFormatter stringFromDate:targetDate];
+		dateString = [NSDateFormatter localizedStringFromDate:targetDate
+                                                    dateStyle:NSDateFormatterMediumStyle
+                                                    timeStyle:NSDateFormatterShortStyle];
 	}
 
 	return dateString;
