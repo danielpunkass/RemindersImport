@@ -94,7 +94,7 @@ end if\n\
 \
 tell application \"OmniFocus\"\n\
 	tell default document\n\
-		make new inbox task with properties {name:\"%@\", start date:%@, due date:%@}\n\
+		make new inbox task with properties {name:\"%@\", start date:%@, due date:%@, note:\"%@\"}\n\
 	end tell\n\
 end tell";
 }
@@ -106,16 +106,17 @@ NSString* dateArgumentStringForDateString(NSString* theDateString)
 	return dateArgument;
 }
 
-BOOL makeOmniFocusInboxTaskFromReminderInfo(NSString* newTaskTitle, NSString* startDateString, NSString* dueDateString)
+BOOL makeOmniFocusInboxTaskFromReminderInfo(NSString* newTaskTitle, NSString* startDateString, NSString* dueDateString, NSString* notes)
 {
 	BOOL didSucceed = NO;
 
-	// Escape any quotes in the task title
+	// Escape any quotes in the task title and notes
 	NSString* escapedTaskTitle = [newTaskTitle stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+	NSString* escapedTaskNotes = [notes stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
 
 	NSString* startDateArgument = dateArgumentStringForDateString(startDateString);
 	NSString* dueDateArgument = dateArgumentStringForDateString(dueDateString);
-	NSString* newTaskAppleScript = [NSString stringWithFormat:omniFocusAddTaskScriptTemplate(), escapedTaskTitle, startDateArgument, dueDateArgument];
+	NSString* newTaskAppleScript = [NSString stringWithFormat:omniFocusAddTaskScriptTemplate(), escapedTaskTitle, startDateArgument, dueDateArgument, escapedTaskNotes];
 	NSAppleScript* addTaskScript = [[[NSAppleScript alloc] initWithSource:newTaskAppleScript] autorelease];
 	NSDictionary* anyError = nil;
 	(void) [addTaskScript executeAndReturnError:&anyError];
@@ -181,7 +182,13 @@ int main(int argc, const char * argv[])
 			NSString* startDateString = scriptableDateStringFromComponents([thisReminder startDateComponents]);
 			NSString* dueDateString = scriptableDateStringFromComponents([thisReminder dueDateComponents]);
 
-			if (makeOmniFocusInboxTaskFromReminderInfo(newTaskName, startDateString, dueDateString) == YES)
+			NSString* notes = [NSString string];
+			if (thisReminder.hasNotes)
+			{
+				notes = [thisReminder notes];
+			}
+
+			if (makeOmniFocusInboxTaskFromReminderInfo(newTaskName, startDateString, dueDateString, notes) == YES)
 			{
 				NSLog(@"Removing task %@ from event store", newTaskName);
 				NSError* removeError = nil;
