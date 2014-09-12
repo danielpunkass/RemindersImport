@@ -1,7 +1,7 @@
 RemindersImport
 ===============
 
-Command-line tool for migrating Mac OS X Reminders from the canonical system storage to The Omni Group's OmniFocus app.
+Command-line tool for migrating Mac OS X Reminders from the canonical system storage to The Omni Group's OmniFocus Pro app. Because this tool relies upon AppleScript support, it will not work with the non-pro version of OmniFocus.
 
 Description
 ===========
