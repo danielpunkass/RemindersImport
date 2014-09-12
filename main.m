@@ -155,14 +155,37 @@ NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 
 	if (inComponents != nil)
 	{
-		// This is in Unicode format as described here: http://userguide.icu-project.org/formatparse/datetime,
-		// and designed to match the example like "Thursday, January 31, 2013 4:32:40 PM". I observed this
-		// format as the default format returned by AppleScript on my US-based English Mac. I can't vouch
-		// for how well this will work in other locales, but let me know if you try it!
-		NSString* dateFormatString = @"EEEE, LLLL d y hh:mm:ss a";
+		// In order to successfully set both the day and the time for a reminder in
+		// OmniFocus, the date string needs to have a format along the lines of:
+		//
+		// "Friday, September 19 2014 10:00:00 AM"
+		//
+		// At least, that is the case on a US English locale Mac. For other locales
+		// we need a robust way of expressing a date with a string that will definitely
+		// be interpreted by AppleScript in such a way that it results in the expected
+		// date inside OmniFocus.
+		//
+		// On this branch, I'm testing Piotr Czapla's proposed fix, which unfortunately
+		// doesn't exactly work as expected for US locale (it loses the time part of the date,
+		// see Github Issue #4).
 		NSDate *targetDate = [gregorianCalendar() dateFromComponents:inComponents];
+#if 1
+		// Old US-centric way:
+
+        NSString* dateFormatString = @"EEEE, LLLL d y hh:mm:ss a";
 		NSDateFormatter* dateFormatter = gregorianFormatterWithFormat(dateFormatString);
 		dateString = [dateFormatter stringFromDate:targetDate];
+#else
+		// Piotr's way:
+
+		// It seems that AppleScript uses the users's localized date format to parse strings to date.
+        // So using a fixed date format won't work for people that have different or custom date format
+        // Here is some more info about this: http://www.jimmcgowan.net/Site/CocoaApplescriptUnicodeDateFormats.html
+        // Therefore we use localizedStringFromDate in order to produce a string according to the system locale.
+		dateString = [NSDateFormatter localizedStringFromDate:targetDate
+                                                    dateStyle:NSDateFormatterMediumStyle
+                                                    timeStyle:NSDateFormatterShortStyle];
+#endif
 	}
 
 	return dateString;
