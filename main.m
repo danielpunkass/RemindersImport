@@ -157,11 +157,12 @@ NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 		// It seems that apple script uses the localized date format to parse strings to date.
         // So using a fixed date format won't work for people that have different or custom date format
         // Here is some more info about this: http://www.jimmcgowan.net/Site/CocoaApplescriptUnicodeDateFormats.html
-        // There for we use localziedStringFromDate in order to produce a string accroding to the system locale.
+        // Therefor we use localziedStringFromDate in order to produce a string accroding to the system locale.
 		NSDate *targetDate = [gregorianCalendar() dateFromComponents:inComponents];
 		dateString = [NSDateFormatter localizedStringFromDate:targetDate
-                                                    dateStyle:NSDateFormatterMediumStyle
-                                                    timeStyle:NSDateFormatterShortStyle];
+                                                    dateStyle:NSDateFormatterFullStyle
+                                                    timeStyle:NSDateFormatterMediumStyle];
+        NSLog(@"dateString:%@", dateString);
 	}
 
 	return dateString;
