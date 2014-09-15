@@ -177,6 +177,21 @@ NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 	return dateString;
 }
 
+BOOL shouldPreserveTimeBasedReminders(NSArray* argumentsArray)
+{
+	BOOL shouldPreserve = NO;
+
+	for (NSString* thisArg in argumentsArray)
+	{
+		if ([thisArg rangeOfString:@"--preserveTimeSensitiveReminders"].location != NSNotFound)
+		{
+			shouldPreserve = YES;
+		}
+	}
+
+	return shouldPreserve;
+}
+
 int main(int argc, const char * argv[])
 {
 	@autoreleasepool
@@ -197,13 +212,21 @@ int main(int argc, const char * argv[])
 				notes = [thisReminder notes];
 			}
 
-			if (makeOmniFocusInboxTaskFromReminderInfo(newTaskName, startDateString, dueDateString, notes) == YES)
+			// Experimenting with an idea that time based reminders should be left in Apple's reminders
+			// for maximum likelihood of reminding e.g. on phone/whatever. Maybe OmniFocus can be configured to
+			// be as naggy as Apple's notifications but for now this seems to work better for me to default
+			// time sensitive e.g. "Remind me 10 minutes to take out the trash" items to stay in Apple's domain.
+			if (((startDateString == nil) && (dueDateString == nil)) ||
+				shouldPreserveTimeBasedReminders([[NSProcessInfo processInfo] arguments]) == NO)
 			{
-				NSLog(@"Removing task %@ from event store", newTaskName);
-				NSError* removeError = nil;
-				if ([eventStore removeReminder:thisReminder commit:NO error:&removeError] == NO)
+				if (makeOmniFocusInboxTaskFromReminderInfo(newTaskName, startDateString, dueDateString, notes) == YES)
 				{
-					NSLog(@"Failed to remove reminder %@ from event store. Error: %@", newTaskName, [removeError localizedDescription]);
+					NSLog(@"Removing task %@ from event store", newTaskName);
+					NSError* removeError = nil;
+					if ([eventStore removeReminder:thisReminder commit:NO error:&removeError] == NO)
+					{
+						NSLog(@"Failed to remove reminder %@ from event store. Error: %@", newTaskName, [removeError localizedDescription]);
+					}
 				}
 			}
 		}
