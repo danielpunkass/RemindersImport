@@ -140,15 +140,6 @@ NSCalendar* gregorianCalendar()
 	return [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];;
 }
 
-NSDateFormatter* gregorianFormatterWithFormat(NSString* formatString)
-{
-	NSDateFormatter* gregorianFormatter = [[[NSDateFormatter alloc] init] autorelease];
-	[gregorianFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
-	[gregorianFormatter setDateFormat:formatString];
-	[gregorianFormatter setCalendar:gregorianCalendar()];
-	return gregorianFormatter;
-}
-
 NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 {
 	NSString* dateString = nil;
@@ -165,27 +156,22 @@ NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 		// be interpreted by AppleScript in such a way that it results in the expected
 		// date inside OmniFocus.
 		//
-		// On this branch, I'm testing Piotr Czapla's proposed fix, which unfortunately
+		// Piotr Czapla's proposed fix is to use -[NSDateFormatter localizedSTringFromDate...] with
+		// suitable date and time styles to match what we had previously hardcoded for the US
+		// locale, while presumably also managing to provide more suitable behavior to other locales
+		// as well. I'm sure there are some locales that are not covered by this behavior but 
+		// in the absence of a more universal solution this will at least work better than 
+		// hardcoding to US English locale did.
+		//
 		// doesn't exactly work as expected for US locale (it loses the time part of the date,
 		// see Github Issue #4).
+		//
+		// More information about Cocoa and AppleScript date interactions can be 
+		// be found here: http://www.jimmcgowan.net/Site/CocoaApplescriptUnicodeDateFormats.html
 		NSDate *targetDate = [gregorianCalendar() dateFromComponents:inComponents];
-#if 1
-		// Old US-centric way:
-
-        NSString* dateFormatString = @"EEEE, LLLL d y hh:mm:ss a";
-		NSDateFormatter* dateFormatter = gregorianFormatterWithFormat(dateFormatString);
-		dateString = [dateFormatter stringFromDate:targetDate];
-#else
-		// Piotr's way:
-
-		// It seems that AppleScript uses the users's localized date format to parse strings to date.
-        // So using a fixed date format won't work for people that have different or custom date format
-        // Here is some more info about this: http://www.jimmcgowan.net/Site/CocoaApplescriptUnicodeDateFormats.html
-        // Therefore we use localizedStringFromDate in order to produce a string according to the system locale.
 		dateString = [NSDateFormatter localizedStringFromDate:targetDate
-                                                    dateStyle:NSDateFormatterMediumStyle
-                                                    timeStyle:NSDateFormatterShortStyle];
-#endif
+                                                    dateStyle:NSDateFormatterFullStyle
+                                                    timeStyle:NSDateFormatterMediumStyle];
 	}
 
 	return dateString;
