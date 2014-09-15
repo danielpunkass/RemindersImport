@@ -140,29 +140,38 @@ NSCalendar* gregorianCalendar()
 	return [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];;
 }
 
-NSDateFormatter* gregorianFormatterWithFormat(NSString* formatString)
-{
-	NSDateFormatter* gregorianFormatter = [[[NSDateFormatter alloc] init] autorelease];
-	[gregorianFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
-	[gregorianFormatter setDateFormat:formatString];
-	[gregorianFormatter setCalendar:gregorianCalendar()];
-	return gregorianFormatter;
-}
-
 NSString* scriptableDateStringFromComponents(NSDateComponents* inComponents)
 {
 	NSString* dateString = nil;
 
 	if (inComponents != nil)
 	{
-		// This is in Unicode format as described here: http://userguide.icu-project.org/formatparse/datetime,
-		// and designed to match the example like "Thursday, January 31, 2013 4:32:40 PM". I observed this
-		// format as the default format returned by AppleScript on my US-based English Mac. I can't vouch
-		// for how well this will work in other locales, but let me know if you try it!
-		NSString* dateFormatString = @"EEEE, LLLL d y hh:mm:ss a";
+		// In order to successfully set both the day and the time for a reminder in
+		// OmniFocus, the date string needs to have a format along the lines of:
+		//
+		// "Friday, September 19 2014 10:00:00 AM"
+		//
+		// At least, that is the case on a US English locale Mac. For other locales
+		// we need a robust way of expressing a date with a string that will definitely
+		// be interpreted by AppleScript in such a way that it results in the expected
+		// date inside OmniFocus.
+		//
+		// Piotr Czapla's proposed fix is to use -[NSDateFormatter localizedSTringFromDate...] with
+		// suitable date and time styles to match what we had previously hardcoded for the US
+		// locale, while presumably also managing to provide more suitable behavior to other locales
+		// as well. I'm sure there are some locales that are not covered by this behavior but 
+		// in the absence of a more universal solution this will at least work better than 
+		// hardcoding to US English locale did.
+		//
+		// doesn't exactly work as expected for US locale (it loses the time part of the date,
+		// see Github Issue #4).
+		//
+		// More information about Cocoa and AppleScript date interactions can be 
+		// be found here: http://www.jimmcgowan.net/Site/CocoaApplescriptUnicodeDateFormats.html
 		NSDate *targetDate = [gregorianCalendar() dateFromComponents:inComponents];
-		NSDateFormatter* dateFormatter = gregorianFormatterWithFormat(dateFormatString);
-		dateString = [dateFormatter stringFromDate:targetDate];
+		dateString = [NSDateFormatter localizedStringFromDate:targetDate
+                                                    dateStyle:NSDateFormatterFullStyle
+                                                    timeStyle:NSDateFormatterMediumStyle];
 	}
 
 	return dateString;
