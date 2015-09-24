@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <EventKit/EventKit.h>
+#import "SPI-UAUserActivityClasses.h"
 
 NSArray* importableReminderItems(EKEventStore* theEventStore)
 {
@@ -200,32 +201,82 @@ int main(int argc, const char * argv[])
 
 		for (EKReminder* thisReminder in importableReminderItems(eventStore))
 		{
-			// Extract the information we need to ask OmniFocus to add the item
-			NSString* newTaskName = [thisReminder title];
-
 			NSString* startDateString = scriptableDateStringFromComponents([thisReminder startDateComponents]);
 			NSString* dueDateString = scriptableDateStringFromComponents([thisReminder dueDateComponents]);
-
-			NSString* notes = [NSString string];
-			if (thisReminder.hasNotes)
-			{
-				notes = [thisReminder notes];
-			}
 
 			// Experimenting with an idea that time based reminders should be left in Apple's reminders
 			// for maximum likelihood of reminding e.g. on phone/whatever. Maybe OmniFocus can be configured to
 			// be as naggy as Apple's notifications but for now this seems to work better for me to default
 			// time sensitive e.g. "Remind me 10 minutes to take out the trash" items to stay in Apple's domain.
-			if (((startDateString == nil) && (dueDateString == nil)) ||
-				shouldPreserveTimeBasedReminders([[NSProcessInfo processInfo] arguments]) == NO)
+			BOOL shouldMoveToOmniFocus = ((startDateString == nil) && (dueDateString == nil)) ||
+				shouldPreserveTimeBasedReminders([[NSProcessInfo processInfo] arguments]);
+
+			if (shouldMoveToOmniFocus)
 			{
-				if (makeOmniFocusInboxTaskFromReminderInfo(newTaskName, startDateString, dueDateString, notes) == YES)
+				// Extract the information we need to ask OmniFocus to add the item
+				NSString* newTaskName = [thisReminder title];
+
+				NSString* notes = [NSString string];
+				if (thisReminder.hasNotes)
 				{
-					NSLog(@"Removing task %@ from event store", newTaskName);
-					NSError* removeError = nil;
-					if ([eventStore removeReminder:thisReminder commit:NO error:&removeError] == NO)
+					notes = [thisReminder notes];
+				}
+
+				// Get a link out if present - e.g. for deep link actions created on iOS
+				// This uses an undocumented SPI, but it beats leaving the data to wilt on the vine!
+				NSData* appLinkData = [thisReminder valueForKey:@"appLink"];
+				if (appLinkData != nil)
+				{
+					// Play it safe for now that we haven't got a total, useful import of the data
+					shouldMoveToOmniFocus = NO;
+
+					// Instantiates private UAUserActivityInfo instance from UserActivity.framework
+					UAUserActivityInfo* appLinkInfo = [NSKeyedUnarchiver unarchiveObjectWithData:appLinkData];
+					if (appLinkInfo != nil)
 					{
-						NSLog(@"Failed to remove reminder %@ from event store. Error: %@", newTaskName, [removeError localizedDescription]);
+						UAUserActivity *userActivity = [[UAUserActivity alloc] initWithManager:[UAUserActivityManager defaultManager] userActivityInfo:appLinkInfo];
+						NSDictionary* userInfoDict = [userActivity userInfo];
+						if (userInfoDict != nil)
+						{
+							// If we don't find anything suitable, we won't import the item
+							NSMutableString* appendedNotesString = nil;
+
+							if ([[userActivity typeIdentifier] isEqualToString:@"com.apple.mail.message"])
+							{
+								// E.g. a URL that will open up the targeted message in Mail.app
+								NSString* messageURLString = [userInfoDict objectForKey:@"messageURL"];
+								if ([messageURLString length] > 0)
+								{
+									appendedNotesString = [[NSMutableString alloc] initWithFormat:@"Target email '%@': %@", [appLinkInfo title], messageURLString];
+								}
+							}
+
+							if (appendedNotesString != nil)
+							{
+								// If user has some notes already, then put a buffer newline in
+								if ([notes length] > 0)
+								{
+									[appendedNotesString insertString:@"\n" atIndex:0];
+								}
+								notes = [notes stringByAppendingString:appendedNotesString];
+
+								shouldMoveToOmniFocus = YES;
+							}
+						}
+					}
+				}
+
+				// Still set to add it?
+				if (shouldMoveToOmniFocus)
+				{
+					if (makeOmniFocusInboxTaskFromReminderInfo(newTaskName, startDateString, dueDateString, notes) == YES)
+					{
+						NSLog(@"Removing task %@ from event store", newTaskName);
+						NSError* removeError = nil;
+						if ([eventStore removeReminder:thisReminder commit:NO error:&removeError] == NO)
+						{
+							NSLog(@"Failed to remove reminder %@ from event store. Error: %@", newTaskName, [removeError localizedDescription]);
+						}
 					}
 				}
 			}

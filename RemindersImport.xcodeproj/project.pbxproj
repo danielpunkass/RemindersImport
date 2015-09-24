@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65379A551BB31BF700F2BA6C /* UserActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65379A541BB31BF700F2BA6C /* UserActivity.framework */; };
 		65B462CD16B9FE47006987B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65B462CC16B9FE47006987B3 /* Foundation.framework */; };
 		65B462D016B9FE47006987B3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 65B462CF16B9FE47006987B3 /* main.m */; };
 		65B462DD16B9FF24006987B3 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65B462DC16B9FF24006987B3 /* EventKit.framework */; };
@@ -25,6 +26,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		65379A541BB31BF700F2BA6C /* UserActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserActivity.framework; path = ../../../../../System/Library/PrivateFrameworks/UserActivity.framework; sourceTree = "<group>"; };
+		65379A561BB31C6E00F2BA6C /* SPI-UAUserActivityClasses.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SPI-UAUserActivityClasses.h"; sourceTree = "<group>"; };
 		659F835B19C32A02004589CC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		65B462C916B9FE47006987B3 /* RemindersImport */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RemindersImport; sourceTree = BUILT_PRODUCTS_DIR; };
 		65B462CC16B9FE47006987B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -38,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65379A551BB31BF700F2BA6C /* UserActivity.framework in Frameworks */,
 				65B462CD16B9FE47006987B3 /* Foundation.framework in Frameworks */,
 				65B462DD16B9FF24006987B3 /* EventKit.framework in Frameworks */,
 			);
@@ -67,6 +71,7 @@
 		65B462CB16B9FE47006987B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				65379A541BB31BF700F2BA6C /* UserActivity.framework */,
 				65B462CC16B9FE47006987B3 /* Foundation.framework */,
 				65B462DC16B9FF24006987B3 /* EventKit.framework */,
 			);
@@ -78,6 +83,7 @@
 			children = (
 				65B462D216B9FE47006987B3 /* RemindersImport-Prefix.pch */,
 				65B462CF16B9FE47006987B3 /* main.m */,
+				65379A561BB31C6E00F2BA6C /* SPI-UAUserActivityClasses.h */,
 			);
 			name = Source;
 			sourceTree = SOURCE_ROOT;
@@ -108,7 +114,7 @@
 		65B462C116B9FE47006987B3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Bitsplitting;
 			};
 			buildConfigurationList = 65B462C416B9FE47006987B3 /* Build configuration list for PBXProject "RemindersImport" */;
@@ -153,6 +159,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -199,6 +206,10 @@
 		65B462D816B9FE47006987B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RemindersImport-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -208,6 +219,10 @@
 		65B462D916B9FE47006987B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RemindersImport-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
