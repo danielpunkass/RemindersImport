@@ -45,10 +45,27 @@ If you've opted to use a different reminders list for OmniFocus, you can specify
 Automatic Execution
 ====================
 
-Running the tool by hand is about as annoying as having to remember to open up the iPhone and launch OmniFocus, so ideally you'll want to set this thing up to run on its own automatically. I haven't yet settled on the ideal approach for this, but a crude way of setting it up would be to just use Mac OS X's built-in cron scheduling service to run the tool very often, say every minute:
+Running the tool by hand is about as annoying as having to remember to open up the iPhone and launch OmniFocus, so ideally you'll want to set this thing up to run on its own automatically. Previously I used a crude crontab entry to achieve this, but starting in OS X 10.12 I have found that the cron-initiated task for some reason fails to perform the desired import. I've switched to using a launchd "Launch Agent" which can be achieved by adding a file like this to for example ~/Library/LaunchAgents/com.jalkut.remindersimport.plist:
 
 <pre>
-*/1 * * * * /Users/daniel/bin/RemindersImport
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+&lt;plist version="1.0">
+&lt;dict>
+        &lt;key>Label&lt;/key>
+        &lt;string>com.red-sweater.remindersimport&lt;/string>
+        &lt;key>Program&lt;/key>
+        &lt;string>/Volumes/Data/daniel/bin/RemindersImport&lt;/string>
+        &lt;key>LowPriorityIO&lt;/key>
+        &lt;true/>
+        &lt;key>Nice&lt;/key>
+        &lt;integer>1&lt;/integer>
+        &lt;key>StartInterval&lt;/key>
+        &lt;integer>60&lt;/integer>
+&lt;/dict>
+&lt;/plist>
 </pre>
 
-Something I'd like to look into is whether it would make sense to set this tool up as lightweight daemon that just stays running all the time, waiting for Reminders database changes to happen, and then snagging stuff. For now, the crontab based trick is doing the job well enough for my needs.
+With this configuration, thanks to the "StartInterval" value of 60, the importer will run every minute to see if any new reminders are available to import.
+
+Something I'd like to look into is whether it would make sense to set this tool up as lightweight daemon that just stays running all the time, waiting for Reminders database changes to happen, and then snagging stuff. For now, the launchd based trick is doing the job well enough for my needs.
