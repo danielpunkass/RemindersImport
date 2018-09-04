@@ -45,7 +45,7 @@ If you've opted to use a different reminders list for OmniFocus, you can specify
 Automatic Execution
 ====================
 
-Running the tool by hand is about as annoying as having to remember to open up the iPhone and launch OmniFocus, so ideally you'll want to set this thing up to run on its own automatically. Previously I used a crude crontab entry to achieve this, but starting in OS X 10.12 I have found that the cron-initiated task for some reason fails to perform the desired import. I've switched to using a launchd "Launch Agent" which can be achieved by adding a file like this to for example ~/Library/LaunchAgents/com.jalkut.remindersimport.plist:
+Running the tool by hand is about as annoying as having to remember to open up the iPhone and launch OmniFocus, so ideally you'll want to set this thing up to run on its own automatically. Previously I used a crude crontab entry to achieve this, but starting in OS X 10.12 I have found that the cron-initiated task for some reason fails to perform the desired import. I've switched to using a launchd "Launch Agent" which can be achieved by adding a file like this to for example ~/Library/LaunchAgents/com.punkitup.remindersimport.plist:
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?>
@@ -53,7 +53,7 @@ Running the tool by hand is about as annoying as having to remember to open up t
 &lt;plist version="1.0">
 &lt;dict>
         &lt;key>Label&lt;/key>
-        &lt;string>com.red-sweater.remindersimport&lt;/string>
+        &lt;string>com.punkitup.remindersimport&lt;/string>
         &lt;key>Program&lt;/key>
         &lt;string>/Volumes/Data/daniel/bin/RemindersImport&lt;/string>
         &lt;key>LowPriorityIO&lt;/key>
